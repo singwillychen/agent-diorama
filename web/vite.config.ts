@@ -4,6 +4,6 @@ import path from "node:path";
 
 export default defineConfig({
   plugins: [react()],
-  resolve: { alias: { "@themes": path.resolve(__dirname, "../themes") } },
+  resolve: { alias: { "@themes": path.resolve(import.meta.dirname, "../themes") } },
   server: { port: 5173, fs: { allow: [".."] } },
 });
