@@ -32,6 +32,8 @@ export interface AgentManifest {
 }
 
 export interface AgentView extends AgentManifest {
+  /** Name the agent registered with, before any viewer rename. */
+  originalName?: string;
   state: AgentState;
   stateSince: number;
   /** Short-lived display state (speaking, done…) that falls back to `state`. */

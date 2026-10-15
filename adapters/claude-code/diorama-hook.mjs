@@ -9,6 +9,8 @@
 //   DIORAMA_NAME      display name for the main agent (default 「Claude」)
 //   DIORAMA_ROLE      role for the main agent (default orchestrator)
 //   DIORAMA_PRIVACY   "redacted" to hide prompts / commands / paths in bubbles
+//   DIORAMA_AGENT_ID  fixed id for the main agent (keeps renames/stats across sessions)
+//   DIORAMA_TOKEN     shared secret, when the hub was started with DIORAMA_TOKEN
 import fs from "node:fs";
 import os from "node:os";
 import path from "node:path";
@@ -77,7 +79,7 @@ async function post(events) {
   try {
     await fetch(`${HUB}/v1/events`, {
       method: "POST",
-      headers: { "content-type": "application/json" },
+      headers: { "content-type": "application/json", ...(process.env.DIORAMA_TOKEN ? { authorization: `Bearer ${process.env.DIORAMA_TOKEN}` } : {}) },
       body: JSON.stringify(events),
       signal: ctrl.signal,
     });
@@ -92,9 +94,9 @@ async function main() {
   const ev = p.hook_event_name;
   const sid = String(p.session_id || "unknown");
   const st = loadState(sid);
-  const main = `cc-${sid.slice(0, 8)}`;
+  const main = process.env.DIORAMA_AGENT_ID || `cc-${sid.slice(0, 8)}`;
   // Hooks fired inside a subagent carry its id (newer Claude Code versions).
-  const actor = p.agent_id ? `cc-${sid.slice(0, 8)}-${String(p.agent_id).slice(0, 8)}` : main;
+  const actor = p.agent_id ? `${main}-${String(p.agent_id).slice(0, 8)}` : main;
   const out = [];
   const emit = (type, agent, data, extra = {}) => out.push({ v: "0.1", type, agent, session: sid, data, visibility: PRIVACY, ts: new Date().toISOString(), ...extra });
 

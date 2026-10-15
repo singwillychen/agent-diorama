@@ -4,17 +4,30 @@
 //   node adapters/claude-code/install.mjs --global   → ~/.claude/settings.json (every project)
 //   node adapters/claude-code/install.mjs --print    → just print the JSON snippet
 //   node adapters/claude-code/install.mjs --remove   → remove the hook again
+// Identity options (baked into the hook command as env vars):
+//   --name 雲崖子  --role orchestrator  --id my-claude  --hub http://127.0.0.1:4319  --token s3cret  --privacy redacted
 import fs from "node:fs";
 import os from "node:os";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 
 const HOOK = path.join(path.dirname(fileURLToPath(import.meta.url)), "diorama-hook.mjs");
-const COMMAND = `node "${HOOK}"`;
+const argv = process.argv.slice(2);
+const opt = (name) => { const i = argv.indexOf(`--${name}`); return i >= 0 ? argv[i + 1] : undefined; };
+const quote = (v) => `'${String(v).replace(/'/g, `'\\''`)}'`;
+const ENV = [
+  ["DIORAMA_NAME", opt("name")],
+  ["DIORAMA_ROLE", opt("role")],
+  ["DIORAMA_AGENT_ID", opt("id")],
+  ["DIORAMA_HUB", opt("hub")],
+  ["DIORAMA_TOKEN", opt("token")],
+  ["DIORAMA_PRIVACY", opt("privacy")],
+].filter(([, v]) => v).map(([k, v]) => `${k}=${quote(v)}`);
+const COMMAND = [...ENV, `node "${HOOK}"`].join(" ");
 const EVENTS_WITH_MATCHER = ["PreToolUse", "PostToolUse", "PermissionRequest"];
 const EVENTS = ["SessionStart", "UserPromptSubmit", "Notification", "SubagentStart", "SubagentStop", "PreCompact", "Stop", "SessionEnd"];
 
-const args = new Set(process.argv.slice(2));
+const args = new Set(argv);
 const target = args.has("--global")
   ? path.join(os.homedir(), ".claude", "settings.json")
   : path.join(process.cwd(), ".claude", "settings.local.json");

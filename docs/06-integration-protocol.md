@@ -63,6 +63,13 @@
 
 Adapter 可宣告自己支援哪些指令；不支援的按鈕在 UI 中自動停用。
 
+## 安全
+
+- 中樞預設只聽 `127.0.0.1`。
+- 帶 `Origin` 的瀏覽器請求只接受 localhost 網頁，避免你逛的任意網站偷偷送事件或按下「核准」。其他來源可用 `DIORAMA_ALLOW_ORIGINS=https://a.example,https://b.example` 開放。
+- 設定 `DIORAMA_TOKEN` 後，所有 API（`/v1/health` 除外）都需要 `Authorization: Bearer <token>` 或 `?token=`。
+- 斷線重連時中樞會重送歷史事件，畫面以事件 `id` 去重，不會重複計算成本或時間軸。
+
 ## Agent Manifest
 
 agent「入職」時送出的描述，決定它在場景中的外觀與位置。見 [`spec/agent-manifest.schema.json`](../spec/agent-manifest.schema.json) 與 [`examples/agent-manifest.example.json`](../examples/agent-manifest.example.json)。

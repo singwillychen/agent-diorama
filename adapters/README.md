@@ -50,6 +50,14 @@ node adapters/claude-code/install.mjs --remove
 
 安裝後新開的 Claude Code session 就會出現在山門中。
 
+安裝時可直接指定身分（會寫進 hook 指令）：
+
+```bash
+node adapters/claude-code/install.mjs --name 雲崖子 --role orchestrator --id my-claude
+```
+
+`--id` 讓主角色每次都用同一個 ID，畫面上的自訂名稱與統計才會跨 session 保留。同時開多個 Claude Code session 時，請不要共用同一個 ID。
+
 環境變數：
 
 | 變數 | 預設 | 用途 |
@@ -58,6 +66,8 @@ node adapters/claude-code/install.mjs --remove
 | `DIORAMA_NAME` | `Claude xxxx` | 主角色顯示名稱 |
 | `DIORAMA_ROLE` | `orchestrator` | 主角色職能 |
 | `DIORAMA_PRIVACY` | `public` | 設為 `redacted` 則不送出 prompt、指令、路徑內容 |
+| `DIORAMA_AGENT_ID` | `cc-<session>` | 固定的主角色 ID |
+| `DIORAMA_TOKEN` | — | 中樞以 `DIORAMA_TOKEN` 啟動時需要 |
 
 hook 永遠以 exit 0 結束、不輸出任何東西、網路逾時 0.8 秒，所以中樞沒開也不會影響 Claude Code。
 

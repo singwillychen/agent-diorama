@@ -16,6 +16,26 @@ const LOG_FILE = path.join(DATA_DIR, "events.jsonl");
 const STATIC_DIR = path.join(ROOT, "web", "dist");
 const MAX_EVENTS = 20000;
 const MAX_BODY = 5 * 1024 * 1024;
+// Optional shared secret. When set, every API call needs `Authorization: Bearer <token>` or `?token=`.
+const TOKEN = process.env.DIORAMA_TOKEN || "";
+// Browsers may only call the hub from these origins (pages on localhost by default),
+// so a random website you visit cannot inject events or approve requests.
+const EXTRA_ORIGINS = (process.env.DIORAMA_ALLOW_ORIGINS || "").split(",").map((s) => s.trim()).filter(Boolean);
+
+function originAllowed(origin) {
+  if (!origin) return true; // curl, hooks, SDK clients send no Origin
+  if (EXTRA_ORIGINS.includes("*") || EXTRA_ORIGINS.includes(origin)) return true;
+  try {
+    const { hostname } = new URL(origin);
+    return hostname === "localhost" || hostname === "127.0.0.1" || hostname === "[::1]" || hostname.endsWith(".localhost");
+  } catch { return false; }
+}
+
+function authorized(req, url) {
+  if (!TOKEN) return true;
+  const header = req.headers.authorization || "";
+  return header === `Bearer ${TOKEN}` || url.searchParams.get("token") === TOKEN;
+}
 
 /** @type {any[]} */
 let events = [];
@@ -109,13 +129,18 @@ function serveStatic(req, res, pathname) {
 }
 
 const server = http.createServer(async (req, res) => {
-  res.setHeader("access-control-allow-origin", "*");
-  res.setHeader("access-control-allow-headers", "content-type");
-  res.setHeader("access-control-allow-methods", "GET,POST,OPTIONS");
-  if (req.method === "OPTIONS") return res.writeHead(204).end();
-
+  const origin = req.headers.origin;
   const url = new URL(req.url || "/", `http://${req.headers.host}`);
   const p = url.pathname;
+  if (p.startsWith("/v1/") && !originAllowed(origin)) return send(res, 403, { error: `origin not allowed: ${origin}` });
+  if (origin) {
+    res.setHeader("access-control-allow-origin", origin);
+    res.setHeader("vary", "origin");
+  }
+  res.setHeader("access-control-allow-headers", "content-type, authorization");
+  res.setHeader("access-control-allow-methods", "GET,POST,OPTIONS");
+  if (req.method === "OPTIONS") return res.writeHead(204).end();
+  if (p.startsWith("/v1/") && p !== "/v1/health" && !authorized(req, url)) return send(res, 401, { error: "missing or wrong DIORAMA_TOKEN" });
 
   try {
     if (p === "/v1/health") return send(res, 200, { ok: true, events: events.length, viewers: viewers.size });
@@ -181,5 +206,5 @@ const server = http.createServer(async (req, res) => {
 });
 
 server.listen(PORT, HOST, () => {
-  console.log(`[diorama-hub] listening on http://${HOST}:${PORT}  (events loaded: ${events.length})`);
+  console.log(`[diorama-hub] listening on http://${HOST}:${PORT}  (events loaded: ${events.length})${TOKEN ? "  [token required]" : ""}`);
 });

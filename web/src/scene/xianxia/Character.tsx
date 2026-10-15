@@ -7,6 +7,7 @@ import * as THREE from "three";
 import type { AgentState, AgentView } from "../../engine/types";
 import type { Bubble } from "../../engine/bubbles";
 import { agentPositions } from "./Effects";
+import { Term } from "../../ui/Term";
 
 const ROLE_PALETTE: Record<string, { robe: string; accent: string }> = {
   orchestrator: { robe: "#f2efe6", accent: "#c9a23a" },
@@ -492,7 +493,10 @@ export function Character(p: CharacterProps) {
               <div className={`nametag ${p.selected ? "selected" : ""}`}>
                 <span className="vendor-dot" data-vendor={agent.vendor || "unknown"} />
                 <b>{agent.name}</b>
-                <span className="nametag-title">{p.title}{p.rankLabel ? `・${p.rankLabel}` : ""}</span>
+                <span className="nametag-title">
+                  <Term id={`role.${agent.role}`} text={p.title} />
+                  {p.rankLabel && <>・<Term id="rank">{p.rankLabel}</Term></>}
+                </span>
               </div>
             )}
           </div>

@@ -244,5 +244,264 @@
     "label": "USD",
     "perUsd": 1,
     "decimals": 3
+  },
+  "glossary": {
+    "panel.roster": {
+      "zh": "Agent 列表",
+      "en": "Agents"
+    },
+    "panel.tasks": {
+      "zh": "任務看板",
+      "en": "Tasks"
+    },
+    "panel.timeline": {
+      "zh": "事件紀錄",
+      "en": "Log"
+    },
+    "panel.approvals": {
+      "zh": "核准請求",
+      "en": "Approvals"
+    },
+    "panel.cost": {
+      "zh": "Token 與成本",
+      "en": "Tokens & cost"
+    },
+    "panel.context": {
+      "zh": "Context 用量",
+      "en": "Context window"
+    },
+    "panel.agent": {
+      "zh": "Agent 詳情",
+      "en": "Agent details"
+    },
+    "cost": {
+      "zh": "Token 成本",
+      "en": "Token cost"
+    },
+    "context": {
+      "zh": "Context 用量",
+      "en": "Context window usage"
+    },
+    "agentsCount": {
+      "zh": "Agents",
+      "en": "Agent count"
+    },
+    "approve": {
+      "zh": "核准",
+      "en": "Approve"
+    },
+    "reject": {
+      "zh": "駁回",
+      "en": "Reject"
+    },
+    "parent": {
+      "zh": "上層 Agent",
+      "en": "Parent agent"
+    },
+    "human": {
+      "zh": "使用者（你）",
+      "en": "You (human)"
+    },
+    "rank": {
+      "zh": "等級",
+      "en": "Rank"
+    },
+    "budget": {
+      "zh": "預算",
+      "en": "Budget"
+    },
+    "mood.calm": {
+      "zh": "系統正常",
+      "en": "Normal"
+    },
+    "mood.unstable": {
+      "zh": "需要注意",
+      "en": "Attention: approval needed or agent blocked"
+    },
+    "mood.tribulation": {
+      "zh": "警報",
+      "en": "Alert: error or over budget"
+    },
+    "source.hub": {
+      "zh": "已連線",
+      "en": "Connected to event hub"
+    },
+    "source.demo": {
+      "zh": "示範模式",
+      "en": "Demo mode (simulated data)"
+    },
+    "source.connecting": {
+      "zh": "連線中",
+      "en": "Connecting"
+    },
+    "source.offline": {
+      "zh": "中樞斷線",
+      "en": "Hub disconnected"
+    },
+    "filter.all": {
+      "zh": "全部",
+      "en": "All"
+    },
+    "filter.talk": {
+      "zh": "訊息",
+      "en": "Messages"
+    },
+    "filter.work": {
+      "zh": "工具呼叫",
+      "en": "Tool calls"
+    },
+    "filter.warn": {
+      "zh": "核准請求",
+      "en": "Approvals"
+    },
+    "filter.error": {
+      "zh": "錯誤",
+      "en": "Errors"
+    },
+    "filter.good": {
+      "zh": "完成與產出",
+      "en": "Results"
+    },
+    "task.open": {
+      "zh": "待辦",
+      "en": "Open"
+    },
+    "task.assigned": {
+      "zh": "已指派",
+      "en": "Assigned"
+    },
+    "task.in_progress": {
+      "zh": "進行中",
+      "en": "In progress"
+    },
+    "task.done": {
+      "zh": "完成",
+      "en": "Done"
+    },
+    "task.failed": {
+      "zh": "失敗",
+      "en": "Failed"
+    },
+    "state.idle": {
+      "zh": "閒置",
+      "en": "Idle"
+    },
+    "state.thinking": {
+      "zh": "推論中",
+      "en": "Thinking (LLM)"
+    },
+    "state.tool_call": {
+      "zh": "呼叫工具",
+      "en": "Tool call"
+    },
+    "state.speaking": {
+      "zh": "傳送訊息",
+      "en": "Sending message"
+    },
+    "state.listening": {
+      "zh": "接收訊息",
+      "en": "Receiving message"
+    },
+    "state.meeting": {
+      "zh": "多 agent 討論",
+      "en": "Meeting"
+    },
+    "state.waiting_human": {
+      "zh": "等待人類核准",
+      "en": "Waiting for approval"
+    },
+    "state.blocked": {
+      "zh": "受阻",
+      "en": "Blocked"
+    },
+    "state.error": {
+      "zh": "錯誤",
+      "en": "Error"
+    },
+    "state.retrying": {
+      "zh": "重試",
+      "en": "Retrying"
+    },
+    "state.long_running": {
+      "zh": "長時間任務",
+      "en": "Long-running"
+    },
+    "state.done": {
+      "zh": "完成",
+      "en": "Done"
+    },
+    "state.offline": {
+      "zh": "離線",
+      "en": "Offline"
+    },
+    "role.orchestrator": {
+      "zh": "協調者",
+      "en": "Orchestrator"
+    },
+    "role.planner": {
+      "zh": "規劃者",
+      "en": "Planner"
+    },
+    "role.researcher": {
+      "zh": "研究員",
+      "en": "Researcher"
+    },
+    "role.builder": {
+      "zh": "執行者",
+      "en": "Builder"
+    },
+    "role.reviewer": {
+      "zh": "審查者",
+      "en": "Reviewer"
+    },
+    "role.monitor": {
+      "zh": "監控",
+      "en": "Monitor"
+    },
+    "role.communicator": {
+      "zh": "對外溝通",
+      "en": "Communicator"
+    },
+    "role.designer": {
+      "zh": "設計",
+      "en": "Designer"
+    },
+    "role.subagent": {
+      "zh": "子代理",
+      "en": "Sub-agent"
+    },
+    "role.human": {
+      "zh": "使用者",
+      "en": "Human"
+    }
+  },
+  "labels": {
+    "agentsCount": "Agent",
+    "approve": "核准",
+    "reject": "駁回",
+    "context": "Context",
+    "parent": "上層",
+    "human": "你",
+    "rank": "等級",
+    "budget": "預算",
+    "mood.calm": "正常",
+    "mood.unstable": "注意",
+    "mood.tribulation": "警報",
+    "source.hub": "已連線",
+    "source.demo": "示範模式",
+    "source.connecting": "連線中…",
+    "source.offline": "連線中斷",
+    "filter.all": "全部",
+    "filter.talk": "訊息",
+    "filter.work": "工具",
+    "filter.warn": "請求",
+    "filter.error": "錯誤",
+    "filter.good": "成果",
+    "task.open": "待辦",
+    "task.assigned": "已指派",
+    "task.in_progress": "進行中",
+    "task.done": "完成",
+    "task.failed": "失敗",
+    "cost": "成本"
   }
 }

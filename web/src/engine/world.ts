@@ -20,12 +20,23 @@ export interface WorldState {
   budgetUsd: number;
   totalCostUsd: number;
   selected?: string;
+  /** Viewer-chosen display names, keyed by agent id (persisted locally). */
+  aliases: Record<string, string>;
   eventCount: number;
   lastEvent?: DioramaEvent;
   apply: (evt: DioramaEvent) => void;
   select: (id?: string) => void;
   setBudget: (usd: number) => void;
+  rename: (id: string, name: string) => void;
   reset: () => void;
+}
+
+const ALIAS_KEY = "agent-diorama:aliases";
+function loadAliases(): Record<string, string> {
+  try { return JSON.parse(localStorage.getItem(ALIAS_KEY) || "{}"); } catch { return {}; }
+}
+function saveAliases(a: Record<string, string>) {
+  try { localStorage.setItem(ALIAS_KEY, JSON.stringify(a)); } catch { /* storage unavailable */ }
 }
 
 /** What the scene should show right now for an agent. */
@@ -69,7 +80,17 @@ const initial = () => ({
 
 export const useWorld = create<WorldState>((set, get) => ({
   ...initial(),
+  aliases: loadAliases(),
   budgetUsd: 5,
+  rename: (id, name) => {
+    const s = get();
+    const aliases = { ...s.aliases };
+    const clean = name.trim().slice(0, 24);
+    if (clean) aliases[id] = clean; else delete aliases[id];
+    saveAliases(aliases);
+    const a = s.agents[id];
+    set({ aliases, agents: a ? { ...s.agents, [id]: { ...a, name: clean || a.originalName || a.name } } : s.agents });
+  },
   select: (id) => set({ selected: id }),
   setBudget: (usd) => set({ budgetUsd: usd }),
   reset: () => { agentOrder = 0; set(initial()); },
@@ -89,7 +110,7 @@ export const useWorld = create<WorldState>((set, get) => ({
 
     const ensure = (id?: string): AgentView | undefined => {
       if (!id || id === "human" || id === "system") return undefined;
-      if (!agents[id]) agents[id] = blankAgent(id, now);
+      if (!agents[id]) agents[id] = blankAgent(id, now, s.aliases[id] ? { name: s.aliases[id] } : {});
       agents[id] = { ...agents[id], lastEventAt: now };
       return agents[id];
     };
@@ -115,6 +136,8 @@ export const useWorld = create<WorldState>((set, get) => ({
       case "agent.updated": {
         const m: Record<string, any> = { ...d, id: d.id || evt.agent };
         if (!m.id) break;
+        if (m.name) m.originalName = m.name;
+        if (s.aliases[m.id]) m.name = s.aliases[m.id];
         const prev = agents[m.id];
         agents[m.id] = prev ? { ...prev, ...m } : blankAgent(m.id, now, m);
         if (evt.type === "agent.registered" && !prev) log(`${m.name || m.id} 加入`, "good", m.id);

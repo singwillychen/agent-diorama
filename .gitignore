@@ -3,3 +3,4 @@ node_modules/
 web/dist/
 data/
 *.log
+.claude/settings.local.json

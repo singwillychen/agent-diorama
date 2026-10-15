@@ -32,8 +32,8 @@ export function definePanel(p: PanelDef) {
 }
 
 export const LAYOUT_PRESETS: Record<string, { label: string; panels: string[] }> = {
-  commander: { label: "指揮官", panels: ["roster", "approvals", "cost", "timeline"] },
-  debug: { label: "除錯", panels: ["roster", "tasks", "context", "timeline"] },
+  commander: { label: "指揮官", panels: ["roster", "tasks", "approvals", "cost", "timeline"] },
+  debug: { label: "除錯", panels: ["roster", "context", "timeline"] },
   boss: { label: "老闆", panels: ["cost", "tasks", "approvals"] },
   zen: { label: "禪", panels: [] },
 };

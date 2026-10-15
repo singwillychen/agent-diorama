@@ -294,5 +294,30 @@
     "cost": "靈石庫",
     "context": "神識",
     "agent": "弟子詳情"
+  },
+  "labels": {
+    "agentsCount": "弟子",
+    "approve": "准",
+    "reject": "駁",
+    "context": "神識",
+    "parent": "師承",
+    "human": "宗主",
+    "rank": "境界",
+    "budget": "靈石預算",
+    "mood.calm": "風和日麗",
+    "mood.unstable": "風雲變色",
+    "mood.tribulation": "天劫降臨",
+    "filter.all": "全部",
+    "filter.talk": "傳音",
+    "filter.work": "施法",
+    "filter.warn": "請示",
+    "filter.error": "異常",
+    "filter.good": "成果",
+    "task.open": "待領",
+    "task.assigned": "已派",
+    "task.in_progress": "修煉中",
+    "task.done": "功成",
+    "task.failed": "失敗",
+    "cost": "靈石"
   }
 }

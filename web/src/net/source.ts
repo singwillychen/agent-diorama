@@ -14,6 +14,10 @@ interface SourceStore {
 
 const params = new URLSearchParams(location.search);
 const DEFAULT_HUB = params.get("hub") || import.meta.env.VITE_DIORAMA_HUB || "http://127.0.0.1:4319";
+/** Optional shared secret when the hub runs with DIORAMA_TOKEN. */
+const TOKEN = params.get("token") || import.meta.env.VITE_DIORAMA_TOKEN || "";
+const authHeaders = (): Record<string, string> => (TOKEN ? { authorization: `Bearer ${TOKEN}` } : {});
+const withToken = (url: string) => (TOKEN ? `${url}${url.includes("?") ? "&" : "?"}token=${encodeURIComponent(TOKEN)}` : url);
 
 export const useSource = create<SourceStore>((set) => ({
   mode: "connecting",
@@ -32,6 +36,7 @@ let demoSignal: { stopped: boolean } | undefined;
 
 export function startDemo(dispatch: (e: DioramaEvent) => void, speed = 1) {
   stopDemo();
+  disconnectHub();
   const signal = { stopped: false };
   demoSignal = signal;
   useSource.getState().setMode("demo");
@@ -55,6 +60,7 @@ export function stopDemo() {
 }
 
 let es: EventSource | undefined;
+const seen = new Set<string>();
 
 export function connect(dispatch: (e: DioramaEvent) => void) {
   const forceDemo = params.get("demo") === "1";
@@ -63,9 +69,16 @@ export function connect(dispatch: (e: DioramaEvent) => void) {
   const { hubUrl } = useSource.getState();
   let opened = false;
   es?.close();
-  es = new EventSource(`${hubUrl}/v1/stream`);
+  es = new EventSource(withToken(`${hubUrl}/v1/stream`));
   es.onmessage = (m) => {
-    try { dispatch(normalize(JSON.parse(m.data))); } catch { /* ignore malformed */ }
+    try {
+      const evt = normalize(JSON.parse(m.data));
+      // EventSource reconnects replay the hub history; apply each event once.
+      if (seen.has(evt.id)) return;
+      seen.add(evt.id);
+      if (seen.size > 50000) seen.clear();
+      dispatch(evt);
+    } catch { /* ignore malformed */ }
   };
   es.addEventListener("ready", () => {
     opened = true;
@@ -93,15 +106,61 @@ export async function sendCommand(command: string, agent: string | undefined, ar
   }
   await fetch(`${hubUrl}/v1/commands`, {
     method: "POST",
-    headers: { "content-type": "application/json" },
+    headers: { "content-type": "application/json", ...authHeaders() },
     body: JSON.stringify({ command, agent, args }),
   });
   // Adapters that can't act on approvals still get a visible resolution.
   if ((command === "approve" || command === "reject") && args.request) {
     await fetch(`${hubUrl}/v1/events`, {
       method: "POST",
-      headers: { "content-type": "application/json" },
+      headers: { "content-type": "application/json", ...authHeaders() },
       body: JSON.stringify({ type: "approval.resolved", agent: "human", data: { request: args.request, decision: command } }),
     });
   }
 }
+
+/** Stop listening to the hub (e.g. to play the local demo instead). */
+export function disconnectHub() {
+  es?.close();
+  es = undefined;
+}
+
+/** Leave demo mode and reconnect to the hub. */
+export function reconnectHub(dispatch: (e: DioramaEvent) => void) {
+  stopDemo();
+  seen.clear();
+  dispatch(normalize({ type: "custom.reset", agent: "system" }));
+  useSource.getState().setMode("connecting");
+  const url = new URL(location.href);
+  url.searchParams.delete("demo");
+  history.replaceState(null, "", url);
+  params.delete("demo");
+  connect(dispatch);
+}
+
+/** Is the hub reachable? Used by the onboarding wizard. */
+export async function checkHub(): Promise<{ ok: boolean; events?: number; error?: string }> {
+  try {
+    const r = await fetch(withToken(`${useSource.getState().hubUrl}/v1/health`), { headers: authHeaders() });
+    if (!r.ok) return { ok: false, error: `HTTP ${r.status}` };
+    const j = await r.json();
+    return { ok: true, events: j.events };
+  } catch (e) {
+    return { ok: false, error: String((e as Error).message || e) };
+  }
+}
+
+/** Post events to the hub, or apply them locally in demo mode. */
+export async function postEvents(events: Partial<DioramaEvent>[], dispatch: (e: DioramaEvent) => void) {
+  if (useSource.getState().mode !== "hub") {
+    for (const e of events) dispatch(normalize(e));
+    return;
+  }
+  await fetch(`${useSource.getState().hubUrl}/v1/events`, {
+    method: "POST",
+    headers: { "content-type": "application/json", ...authHeaders() },
+    body: JSON.stringify(events),
+  });
+}
+
+export const hubToken = TOKEN;
