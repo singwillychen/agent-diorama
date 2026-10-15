@@ -332,3 +332,23 @@ code { font-family: ui-monospace, "SF Mono", Menlo, monospace; font-size: 0.9em;
   .controls .seg, .controls select { display: none; }
   .stats .pill:nth-child(n + 3) { display: none; }
 }
+
+/* ---------- connection LED: one full breath (brighten + dim) every 4s */
+.pill.src-hub, .pill.src-demo, .pill.src-connecting, .pill.src-offline { display: inline-flex; align-items: center; gap: 6px; }
+.led {
+  --led: #2ecc71; --led-dim: #1d6b3f;
+  width: 9px; height: 9px; border-radius: 50%; flex: none;
+  background: radial-gradient(circle at 35% 35%, #fff 0 12%, var(--led) 45%, var(--led-dim) 100%);
+  box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.25), 0 0 6px 1px var(--led);
+  animation: led-breathe 4s ease-in-out infinite;
+}
+.led-green { --led: #2ecc71; --led-dim: #1d6b3f; }
+.led-yellow { --led: #f5c518; --led-dim: #8a6a00; }
+.led-red { --led: #ff3b30; --led-dim: #7a1410; }
+@keyframes led-breathe {
+  0%, 100% { opacity: 0.35; box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.25), 0 0 2px 0 var(--led); }
+  50% { opacity: 1; box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.25), 0 0 9px 3px var(--led); }
+}
+@media (prefers-reduced-motion: reduce) {
+  .led { animation: none; opacity: 1; }
+}

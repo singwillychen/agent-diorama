@@ -49,6 +49,10 @@ window.AgentDiorama = {
 const panelArea = (id: string) => usePanels.getState().panels.find((p) => p.id === id)?.area ?? "right";
 const presetPanels = (key: string) => (LAYOUT_PRESETS[key]?.panels ?? []).map((id) => ({ id, area: panelArea(id) }));
 
+// Connection LED: green = live hub, yellow = connecting / demo data, red = disconnected.
+const LED = { hub: "green", connecting: "yellow", demo: "yellow", offline: "red" } as const;
+const LED_LABEL = { green: "連線正常", yellow: "連線中或非即時資料", red: "連線中斷" } as const;
+
 function TopBar() {
   const mode = useSource((s) => s.mode);
   const hubUrl = useSource((s) => s.hubUrl);
@@ -82,7 +86,10 @@ function TopBar() {
             <Term id="panel.approvals" /> {approvals}
           </button>
         )}
-        <span className={`pill src-${mode}`} title={mode === "hub" ? hubUrl : undefined}><Term id={`source.${mode}`} /></span>
+        <span className={`pill src-${mode}`} title={mode === "hub" ? hubUrl : undefined}>
+          <span className={`led led-${LED[mode]}`} role="img" aria-label={LED_LABEL[LED[mode]]} />
+          <Term id={`source.${mode}`} />
+        </span>
       </div>
       <div className="controls">
         <div className="seg" role="group" aria-label="術語顯示">
