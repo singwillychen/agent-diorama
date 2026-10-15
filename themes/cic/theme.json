@@ -2,57 +2,238 @@
   "v": "0.1",
   "id": "cic",
   "extends": "_base",
-  "name": { "zh-TW": "CIC 戰情中心", "en": "Combat Information Center" },
+  "name": {
+    "zh-TW": "CIC 戰情中心",
+    "en": "Combat Information Center"
+  },
   "scene": {
     "model": "assets/scenes/cic/cic.glb",
-    "modules": ["command_deck", "console_tiers", "holo_table", "comms_room", "corridor", "galley"]
+    "modules": [
+      "command_deck",
+      "console_tiers",
+      "holo_table",
+      "comms_room",
+      "corridor",
+      "galley"
+    ]
   },
   "roles": {
-    "orchestrator": { "title": "指揮官",   "outfit": "uniform_officer_navy", "badge": "rank_shoulder", "zone": "command_deck", "props": ["binoculars"] },
-    "planner":      { "title": "副艦長",   "outfit": "uniform_officer_navy", "badge": "rank_shoulder", "zone": "command_deck" },
-    "researcher":   { "title": "情報官",   "outfit": "uniform_coverall",     "badge": "armband_intel", "zone": "console_tiers" },
-    "builder":      { "title": "作戰官",   "outfit": "uniform_coverall",     "badge": "armband_ops",   "zone": "console_tiers" },
-    "reviewer":     { "title": "值更官",   "outfit": "uniform_coverall",     "badge": "armband_watch", "zone": "console_tiers" },
-    "monitor":      { "title": "雷達官",   "outfit": "uniform_coverall",     "badge": "armband_radar", "zone": "console_tiers", "props": ["headset"] },
-    "communicator": { "title": "通信官",   "outfit": "uniform_coverall",     "badge": "armband_comms", "zone": "comms_room",   "props": ["headset"] },
-    "designer":     { "title": "作戰圖繪製官", "outfit": "uniform_coverall", "badge": "armband_plot",  "zone": "holo_table" },
-    "subagent":     { "title": "傳令兵",   "outfit": "uniform_rating",       "badge": "none",          "zone": "corridor" },
-    "human":        { "title": "司令",     "outfit": "uniform_flag_officer", "badge": "rank_star",     "zone": "command_deck" }
-  },
-  "ranks": { "1": "二等兵", "3": "士官", "5": "上尉", "7": "上校", "9": "將軍" },
-  "states": {
-    "idle":         { "anim": "drink_coffee", "moveTo": "galley" },
-    "tool_call":    { "anim": "operate_console", "vfx": "console_flash" },
-    "speaking":     { "anim": "press_headset" },
-    "meeting":      { "moveTo": "holo_table" },
-    "done":         { "anim": "salute", "vfx": null },
-    "long_running": { "moveTo": "console_tiers", "vfx": "progress_ring" }
-  },
-  "zones": {
-    "command_deck":  { "anchor": "zone:command_deck",  "label": "指揮台", "capacity": 3 },
-    "console_tiers": { "anchor": "zone:console_tiers", "label": "控制台", "capacity": 12, "overflow": "add_desk" },
-    "holo_table":    { "anchor": "zone:holo_table",    "label": "戰術桌", "capacity": 8 },
-    "comms_room":    { "anchor": "zone:comms_room",    "label": "通信室", "capacity": 3 },
-    "corridor":      { "anchor": "zone:corridor",      "label": "走廊",   "capacity": 20, "overflow": "queue" },
-    "meeting":       { "anchor": "zone:holo_table",    "label": "戰術桌" },
-    "lounge":        { "anchor": "zone:galley",        "label": "茶水角" },
-    "focus":         { "anchor": "zone:console_tiers", "label": "控制台" },
-    "exit":          { "anchor": "zone:hatch",         "label": "艙門" }
-  },
-  "messaging": { "visual": "headset_beam", "broadcastVisual": "pa_ripple" },
-  "ambient": {
-    "conditions": {
-      "green":  { "light": "#1b3a4b", "accent": "#3ddc84", "when": "default" },
-      "yellow": { "light": "#3a3416", "accent": "#ffc107", "when": "any:waiting_human|blocked" },
-      "red":    { "light": "#3a1212", "accent": "#ff3b30", "when": "any:error|budget_exceeded", "vfx": "rotating_beacon" }
+    "orchestrator": {
+      "title": "指揮官",
+      "outfit": "uniform_officer_navy",
+      "badge": "rank_shoulder",
+      "zone": "command_deck",
+      "props": [
+        "binoculars"
+      ]
+    },
+    "planner": {
+      "title": "副艦長",
+      "outfit": "uniform_officer_navy",
+      "badge": "rank_shoulder",
+      "zone": "command_deck"
+    },
+    "researcher": {
+      "title": "情報官",
+      "outfit": "uniform_coverall",
+      "badge": "armband_intel",
+      "zone": "console_tiers"
+    },
+    "builder": {
+      "title": "作戰官",
+      "outfit": "uniform_coverall",
+      "badge": "armband_ops",
+      "zone": "console_tiers"
+    },
+    "reviewer": {
+      "title": "值更官",
+      "outfit": "uniform_coverall",
+      "badge": "armband_watch",
+      "zone": "console_tiers"
+    },
+    "monitor": {
+      "title": "雷達官",
+      "outfit": "uniform_coverall",
+      "badge": "armband_radar",
+      "zone": "console_tiers",
+      "props": [
+        "headset"
+      ]
+    },
+    "communicator": {
+      "title": "通信官",
+      "outfit": "uniform_coverall",
+      "badge": "armband_comms",
+      "zone": "comms_room",
+      "props": [
+        "headset"
+      ]
+    },
+    "designer": {
+      "title": "作戰圖繪製官",
+      "outfit": "uniform_coverall",
+      "badge": "armband_plot",
+      "zone": "holo_table"
+    },
+    "subagent": {
+      "title": "傳令兵",
+      "outfit": "uniform_rating",
+      "badge": "none",
+      "zone": "corridor"
+    },
+    "human": {
+      "title": "司令",
+      "outfit": "uniform_flag_officer",
+      "badge": "rank_star",
+      "zone": "command_deck"
     }
   },
-  "audio": { "ambience": "sonar_hum", "message": "radio_click", "alert": "klaxon_short", "done": "chime_mil" },
-  "metaphors": { "cost": "燃料", "context": "記憶體負載", "error": "戰損", "retry": "重新校準", "done": "任務達成" },
+  "ranks": {
+    "1": "二等兵",
+    "3": "士官",
+    "5": "上尉",
+    "7": "上校",
+    "9": "將軍"
+  },
+  "states": {
+    "idle": {
+      "anim": "drink_coffee",
+      "moveTo": "galley"
+    },
+    "tool_call": {
+      "anim": "operate_console",
+      "vfx": "console_flash"
+    },
+    "speaking": {
+      "anim": "press_headset"
+    },
+    "meeting": {
+      "moveTo": "holo_table"
+    },
+    "done": {
+      "anim": "salute",
+      "vfx": null
+    },
+    "long_running": {
+      "moveTo": "console_tiers",
+      "vfx": "progress_ring"
+    }
+  },
+  "zones": {
+    "command_deck": {
+      "anchor": "zone:command_deck",
+      "label": "指揮台",
+      "capacity": 3
+    },
+    "console_tiers": {
+      "anchor": "zone:console_tiers",
+      "label": "控制台",
+      "capacity": 12,
+      "overflow": "add_desk"
+    },
+    "holo_table": {
+      "anchor": "zone:holo_table",
+      "label": "戰術桌",
+      "capacity": 8
+    },
+    "comms_room": {
+      "anchor": "zone:comms_room",
+      "label": "通信室",
+      "capacity": 3
+    },
+    "corridor": {
+      "anchor": "zone:corridor",
+      "label": "走廊",
+      "capacity": 20,
+      "overflow": "queue"
+    },
+    "meeting": {
+      "anchor": "zone:holo_table",
+      "label": "戰術桌"
+    },
+    "lounge": {
+      "anchor": "zone:galley",
+      "label": "茶水角"
+    },
+    "focus": {
+      "anchor": "zone:console_tiers",
+      "label": "控制台"
+    },
+    "exit": {
+      "anchor": "zone:hatch",
+      "label": "艙門"
+    }
+  },
+  "messaging": {
+    "visual": "headset_beam",
+    "broadcastVisual": "pa_ripple"
+  },
+  "ambient": {
+    "conditions": {
+      "green": {
+        "light": "#1b3a4b",
+        "accent": "#3ddc84",
+        "when": "default"
+      },
+      "yellow": {
+        "light": "#3a3416",
+        "accent": "#ffc107",
+        "when": "any:waiting_human|blocked"
+      },
+      "red": {
+        "light": "#3a1212",
+        "accent": "#ff3b30",
+        "when": "any:error|budget_exceeded",
+        "vfx": "rotating_beacon"
+      }
+    }
+  },
+  "audio": {
+    "ambience": "sonar_hum",
+    "message": "radio_click",
+    "alert": "klaxon_short",
+    "done": "chime_mil"
+  },
+  "metaphors": {
+    "cost": "燃料",
+    "context": "記憶體負載",
+    "error": "戰損",
+    "retry": "重新校準",
+    "done": "任務達成"
+  },
   "tokens": {
     "font": "'JetBrains Mono', monospace",
-    "bg": "#06121a", "surface": "#0b1f2a", "text": "#9fe8c4", "muted": "#4d7a68",
-    "accent": "#3ddc84", "warn": "#ffc107", "danger": "#ff3b30",
-    "radius": "2px", "effects": ["scanline", "glow"]
+    "bg": "#06121a",
+    "surface": "#0b1f2a",
+    "text": "#9fe8c4",
+    "muted": "#4d7a68",
+    "accent": "#3ddc84",
+    "warn": "#ffc107",
+    "danger": "#ff3b30",
+    "radius": "2px",
+    "effects": [
+      "scanline",
+      "glow"
+    ]
+  },
+  "stateLabels": {
+    "idle": "待命",
+    "thinking": "研判",
+    "tool_call": "操作中",
+    "speaking": "通話",
+    "listening": "收聽",
+    "meeting": "作戰會議",
+    "waiting_human": "請求授權",
+    "blocked": "受阻",
+    "error": "故障",
+    "retrying": "重新校準",
+    "long_running": "長時作業",
+    "done": "任務達成",
+    "offline": "離艦"
+  },
+  "costUnit": {
+    "label": "燃料",
+    "perUsd": 100,
+    "decimals": 1
   }
 }

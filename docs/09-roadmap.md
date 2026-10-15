@@ -20,11 +20,24 @@
 | 設定驗證 | JSON Schema（Ajv） | 跨語言 |
 | 3D 資產 | glTF/GLB；AI 生成（Meshy、Tripo）＋人工修整，或外包 | 依精緻度需求 |
 
+## 已決定（2026-10-15）
+
+- [x] 平台：先做網頁平台版，保留轉桌面版的設定文件 → [10-desktop-migration.md](10-desktop-migration.md)
+- [x] 規模：同時最多 10 個 agent（不需要 LOD 與樓層擴充，MVP 全部以完整細節呈現）
+- [x] 3D 素材：先由 Claude 以程式生成 → [11-3d-assets.md](11-3d-assets.md)
+- [x] 第一個場景：修仙山門
+- [x] Adapter 順序：Claude（MVP）→ ChatGPT → MiniMax / Hermes Agent
+- [x] GitHub：公開 repo
+
+## 目前進度
+
+- [x] P0 協定、事件中樞、示範劇本
+- [x] P1 修仙山門場景、60° 鏡頭、狀態動畫、文字泡泡、6 個面板
+- [x] Claude Code adapter
+- [ ] ChatGPT / MiniMax / Hermes adapter
+- [ ] CIC、新創辦公室 3D 場景
+- [ ] 回放時間軸、音效
+
 ## 待決事項
 
-- [ ] 平台：純網頁 or 桌面 App（Tauri / Electron）？
-- [ ] 規模：同時 agent 數量（5–10 vs 50+）
-- [ ] 3D 素材來源與預算
-- [ ] 第一個實作場景
-- [ ] 既有 agent 框架（決定第一個 adapter）
-- [ ] 授權條款（開源 / 私有）
+- [ ] 授權條款（MIT / Apache-2.0 / 其他）

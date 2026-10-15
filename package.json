@@ -1,0 +1,16 @@
+{
+  "name": "agent-diorama",
+  "private": true,
+  "version": "0.1.0",
+  "type": "module",
+  "workspaces": ["web"],
+  "scripts": {
+    "hub": "node server/index.mjs",
+    "web": "npm run dev -w web",
+    "dev": "node scripts/dev.mjs",
+    "sim": "node sim/simulate.mjs",
+    "build": "npm run build -w web",
+    "start": "npm run build && node server/index.mjs"
+  },
+  "engines": { "node": ">=20" }
+}
