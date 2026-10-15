@@ -1,0 +1,44 @@
+{
+  "v": "0.1",
+  "locale": "zh-TW",
+  "_doc": "templates：事件驅動的工作泡泡（可用 {變數}）；idle：閒置台詞池（依 role，_any 為共用）；contextual：情境感知台詞；banter：兩人閒聊劇本。agent 事件若帶 utterance 則優先使用。",
+  "templates": {
+    "llm.started":       { "kind": "thought", "default": ["思考中…", "讓我想想…"] },
+    "tool.called": {
+      "kind": "work",
+      "default": ["使用 {tool.name} 中…"],
+      "byTool": {
+        "grep":   ["搜尋「{args.pattern}」…"],
+        "read":   ["讀取 {args.path}…"],
+        "edit":   ["修改 {args.path}…"],
+        "bash":   ["執行指令中…"],
+        "web_search": ["上網查「{args.query}」…"]
+      }
+    },
+    "tool.failed":       { "kind": "alert", "default": ["{tool.name} 失敗了…"] },
+    "message.sent":      { "kind": "dialogue", "default": ["@{target.name} {data.text}"] },
+    "task.assigned":     { "kind": "dialogue", "default": ["@{target.name} 「{task.title}」交給你了"] },
+    "task.completed":    { "kind": "work", "default": ["「{task.title}」完成！"] },
+    "task.failed":       { "kind": "alert", "default": ["「{task.title}」失敗了"] },
+    "approval.requested":{ "kind": "alert", "default": ["需要你核准：{data.summary}"] },
+    "input.requested":   { "kind": "alert", "default": ["需要你的輸入：{data.prompt}"] },
+    "artifact.created":  { "kind": "work", "default": ["產出了 {data.name}"] },
+    "agent.registered":  { "kind": "narrator", "default": ["{agent.title}「{agent.name}」加入了"] }
+  },
+  "idle": {
+    "_any": ["好，下一個是什麼？", "伸個懶腰。", "等等看有沒有新任務。"]
+  },
+  "contextual": [
+    { "when": { "recent": "error_resolved", "self": true, "within": "60s" }, "lines": ["好險，終於好了。"] },
+    { "when": { "idleFor": "300s" }, "lines": ["好安靜啊…"] },
+    { "when": { "budgetUsedAbove": 0.8 }, "lines": ["預算快用完了…"] },
+    { "when": { "timeOfDay": "night" }, "lines": ["這麼晚了還在跑。"] },
+    { "when": { "recent": "task.completed", "self": false, "within": "30s" }, "lines": ["{other.name} 好快！"] }
+  ],
+  "banter": [
+    [
+      { "role": "_any", "line": "你那邊順利嗎？" },
+      { "role": "_any", "line": "還行，剛跑完一輪。" }
+    ]
+  ]
+}

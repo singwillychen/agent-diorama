@@ -1,0 +1,28 @@
+{
+  "id": "agent_builder_1",
+  "name": "Kai",
+  "role": "builder",
+  "rank": 6,
+  "vendor": "anthropic",
+  "model": "claude-sonnet-5-5",
+  "framework": "claude-agent-sdk",
+  "parent": "agent_lead",
+  "persona": {
+    "voice": "熱血",
+    "chattiness": 0.6,
+    "catchphrases": ["交給我！", "這個簡單。"]
+  },
+  "appearance": {
+    "face": "face_03",
+    "hair": "hair_short_spiky",
+    "hairColor": "#2b1d14",
+    "skinTone": "#f1c7a5",
+    "headRatio": 3.5,
+    "accessory": ["glasses_round"],
+    "themes": {
+      "startup-office": { "outfit": "hoodie_orange" },
+      "xianxia": { "outfit": "robe_crimson", "accessory": ["flying_sword"] }
+    }
+  },
+  "capabilities": ["pause", "resume", "cancel", "send_message"]
+}

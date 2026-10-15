@@ -1,0 +1,48 @@
+{
+  "v": "0.1",
+  "locale": "zh-TW",
+  "templates": {
+    "llm.started":   { "kind": "thought", "default": ["研判中…", "分析態勢…"] },
+    "tool.called": {
+      "kind": "work",
+      "default": ["啟動 {tool.name} 系統。"],
+      "byTool": {
+        "grep":       ["情報檢索：{args.pattern}"],
+        "read":       ["調閱檔案 {args.path}"],
+        "edit":       ["修正部署：{args.path}"],
+        "bash":       ["執行作戰指令。"],
+        "web_search": ["外部偵蒐：{args.query}"]
+      }
+    },
+    "tool.failed":        { "kind": "alert", "default": ["{tool.name} 系統故障！"] },
+    "message.sent":       { "kind": "dialogue", "default": ["{target.title}，{data.text}，完畢。"] },
+    "task.assigned":      { "kind": "dialogue", "default": ["{target.title}，命令你執行「{task.title}」。"] },
+    "task.completed":     { "kind": "work", "default": ["報告，「{task.title}」任務達成！"] },
+    "task.failed":        { "kind": "alert", "default": ["報告，「{task.title}」受阻！"] },
+    "approval.requested": { "kind": "alert", "default": ["請求司令授權：{data.summary}"] },
+    "agent.registered":   { "kind": "narrator", "default": ["{agent.title}「{agent.name}」報到。"] }
+  },
+  "idle": {
+    "_any": ["咖啡還熱的。", "雷達一切正常。", "保持警戒。", "今天海象不錯。"],
+    "orchestrator": ["各單位注意，保持待命。", "全艦狀態回報。"],
+    "monitor": ["螢幕上沒有異常回波。", "聲納靜默中。"],
+    "communicator": ["頻道暢通。", "無線電靜默中。"],
+    "subagent": ["隨時待命！", "等待下一道命令。"]
+  },
+  "contextual": [
+    { "when": { "recent": "error_resolved", "self": true, "within": "60s" }, "lines": ["損管完成，恢復戰備。"] },
+    { "when": { "budgetUsedAbove": 0.8 }, "lines": ["燃料不足，建議返航。"] },
+    { "when": { "timeOfDay": "night" }, "lines": ["夜間值更，提高警覺。"] },
+    { "when": { "recent": "task.completed", "self": false, "within": "30s" }, "lines": ["幹得好，{other.title}。"] }
+  ],
+  "banter": [
+    [
+      { "role": "monitor", "line": "你有聽到剛剛那個回波嗎？" },
+      { "role": "_any", "line": "是鯨魚啦，放輕鬆。" }
+    ],
+    [
+      { "role": "_any", "line": "下次休假要去哪？" },
+      { "role": "_any", "line": "先撐過這次值更再說。" }
+    ]
+  ]
+}

@@ -1,0 +1,69 @@
+{
+  "v": "0.1",
+  "id": "xianxia",
+  "extends": "_base",
+  "name": { "zh-TW": "修仙山門", "en": "Cultivation Sect Peak" },
+  "scene": {
+    "model": "assets/scenes/xianxia/peak.glb",
+    "modules": ["main_hall", "scripture_pavilion", "alchemy_room", "cave_abode", "teleport_array", "grand_array", "beast_garden", "mountain_gate"]
+  },
+  "roles": {
+    "orchestrator": { "title": "掌門",       "outfit": "robe_sect_master",  "badge": "aura_gold",   "zone": "main_hall", "props": ["whisk"] },
+    "planner":      { "title": "執法長老",   "outfit": "robe_elder",        "badge": "aura_violet", "zone": "main_hall" },
+    "researcher":   { "title": "守閣長老",   "outfit": "robe_elder_scholar","badge": "aura_azure",  "zone": "scripture_pavilion", "props": ["jade_slip"] },
+    "builder":      { "title": "煉丹師",     "outfit": "robe_alchemist",    "badge": "aura_crimson","zone": "alchemy_room", "props": ["cauldron"] },
+    "reviewer":     { "title": "戒律堂長老", "outfit": "robe_discipline",   "badge": "aura_iron",   "zone": "main_hall" },
+    "monitor":      { "title": "陣法師",     "outfit": "robe_formation",    "badge": "aura_teal",   "zone": "grand_array", "props": ["array_flag"] },
+    "communicator": { "title": "外事執事",   "outfit": "robe_steward",      "badge": "aura_jade",   "zone": "mountain_gate" },
+    "designer":     { "title": "符籙師",     "outfit": "robe_talisman",     "badge": "aura_ink",    "zone": "scripture_pavilion", "props": ["brush"] },
+    "subagent":     { "title": "外門弟子",   "outfit": "robe_outer_disciple","badge": "none",       "zone": "teleport_array" },
+    "human":        { "title": "宗主",       "outfit": "robe_supreme",      "badge": "aura_celestial","zone": "main_hall" }
+  },
+  "ranks": { "1": "煉氣期", "3": "築基期", "5": "結丹期", "7": "元嬰期", "9": "化神期" },
+  "states": {
+    "idle":          { "anim": "admire_clouds", "moveTo": "lounge" },
+    "thinking":      { "anim": "meditate", "vfx": "qi_swirl" },
+    "tool_call":     { "anim": "cast_seal", "vfx": "artifact_glow" },
+    "speaking":      { "anim": "send_talisman", "vfx": "talisman_streak" },
+    "listening":     { "anim": "receive_jade", "vfx": "jade_glow" },
+    "meeting":       { "moveTo": "meeting" },
+    "waiting_human": { "anim": "kneel_petition", "vfx": "jade_slip_blink" },
+    "blocked":       { "anim": "frown_still", "vfx": "qi_stagnant" },
+    "error":         { "anim": "qi_deviation", "expression": "shock", "vfx": "black_qi" },
+    "retrying":      { "anim": "re_meditate" },
+    "long_running":  { "anim": "closed_door_cultivation", "moveTo": "focus", "vfx": "progress_ring_runes" },
+    "done":          { "anim": "breakthrough", "expression": "proud", "vfx": "light_pillar" },
+    "offline":       { "anim": "petrify", "moveTo": null }
+  },
+  "zones": {
+    "main_hall":          { "anchor": "zone:main_hall",          "label": "議事大殿", "capacity": 10 },
+    "scripture_pavilion": { "anchor": "zone:scripture_pavilion", "label": "藏經閣",   "capacity": 6 },
+    "alchemy_room":       { "anchor": "zone:alchemy_room",       "label": "煉丹房",   "capacity": 8, "overflow": "add_peak" },
+    "grand_array":        { "anchor": "zone:grand_array",        "label": "護山大陣", "capacity": 4 },
+    "mountain_gate":      { "anchor": "zone:mountain_gate",      "label": "山門",     "capacity": 4 },
+    "teleport_array":     { "anchor": "zone:teleport_array",     "label": "傳送陣",   "capacity": 20, "overflow": "queue" },
+    "meeting":            { "anchor": "zone:main_hall",          "label": "議事大殿" },
+    "lounge":             { "anchor": "zone:beast_garden",       "label": "靈獸園" },
+    "focus":              { "anchor": "zone:cave_abode",         "label": "洞府", "overflow": "add_peak" },
+    "exit":               { "anchor": "zone:teleport_array",     "label": "傳送陣" }
+  },
+  "messaging": { "visual": "talisman", "broadcastVisual": "thousand_li_voice_ring" },
+  "ambient": {
+    "conditions": {
+      "calm":     { "sky": "dawn_clouds",  "when": "default" },
+      "unstable": { "sky": "gathering_clouds", "when": "any:waiting_human|blocked" },
+      "tribulation": { "sky": "thunder_tribulation", "when": "any:error|budget_exceeded", "vfx": "lightning" }
+    },
+    "props": {
+      "spiritStones": { "bindTo": "cost.remainingBudget" }
+    }
+  },
+  "audio": { "ambience": "wind_guqin", "message": "talisman_whoosh", "alert": "temple_bell_fast", "done": "crane_cry_chime" },
+  "metaphors": { "cost": "靈石", "context": "神識", "error": "走火入魔", "retry": "再次閉關", "done": "突破", "permission_denied": "撞上禁制", "external_api": "坊市交易" },
+  "tokens": {
+    "font": "'Noto Serif TC', serif",
+    "bg": "#f3eee2", "surface": "#fbf8f0", "text": "#2b2620", "muted": "#8a8070",
+    "accent": "#3f7d6e", "warn": "#c08a2b", "danger": "#a8322d",
+    "radius": "4px", "effects": ["rice_paper", "seal_stamp", "ink_border"]
+  }
+}

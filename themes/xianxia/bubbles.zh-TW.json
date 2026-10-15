@@ -1,0 +1,51 @@
+{
+  "v": "0.1",
+  "locale": "zh-TW",
+  "templates": {
+    "llm.started":   { "kind": "thought", "default": ["靜心參悟…", "此事需細細推演…"] },
+    "tool.called": {
+      "kind": "work",
+      "default": ["祭出法器「{tool.name}」。"],
+      "byTool": {
+        "grep":       ["神識掃過藏經閣，尋「{args.pattern}」。"],
+        "read":       ["展閱玉簡〈{args.path}〉。"],
+        "edit":       ["以丹火重煉〈{args.path}〉。"],
+        "bash":       ["掐訣施法。"],
+        "web_search": ["往坊市打聽「{args.query}」。"]
+      }
+    },
+    "tool.failed":        { "kind": "alert", "default": ["法器「{tool.name}」靈光黯淡！"] },
+    "message.sent":       { "kind": "dialogue", "default": ["傳音{target.title}：{data.text}"] },
+    "task.assigned":      { "kind": "dialogue", "default": ["{target.title}聽令，「{task.title}」由你承辦。"] },
+    "task.completed":     { "kind": "work", "default": ["「{task.title}」已成，僥倖突破！"] },
+    "task.failed":        { "kind": "alert", "default": ["「{task.title}」受阻，靈力反噬…"] },
+    "approval.requested": { "kind": "alert", "default": ["弟子斗膽請示宗主：{data.summary}"] },
+    "agent.registered":   { "kind": "narrator", "default": ["{agent.title}「{agent.name}」自傳送陣降臨。"] }
+  },
+  "idle": {
+    "_any": ["今日雲海翻騰，靈氣甚足。", "仙鶴又來討食了。", "修行之路，道阻且長。", "山中無甲子。"],
+    "orchestrator": ["宗門大比之期將近。", "諸位弟子勤勉，甚慰。"],
+    "researcher": ["此卷古籍，頗有玄機。", "藏經閣又該整理了。"],
+    "builder": ["丹爐火候正好。", "這爐丹，成色應該不錯。"],
+    "monitor": ["大陣運轉如常。", "陣眼靈石該換了。"],
+    "subagent": ["師兄，今日可有差事？", "外門的飯菜還是老樣子。"]
+  },
+  "contextual": [
+    { "when": { "recent": "error_resolved", "self": true, "within": "60s" }, "lines": ["好險…差點走火入魔。"] },
+    { "when": { "idleFor": "300s" }, "lines": ["掌門今日似乎無事交代。"] },
+    { "when": { "budgetUsedAbove": 0.8 }, "lines": ["靈石所剩不多了啊…"] },
+    { "when": { "timeOfDay": "night" }, "lines": ["月色正好，適合參悟。"] },
+    { "when": { "recent": "task.completed", "self": false, "within": "30s" }, "lines": ["{other.name}又突破了，真令人羨慕。"] },
+    { "when": { "contextUsedAbove": 0.85, "self": true }, "lines": ["神識有些吃緊…"] }
+  ],
+  "banter": [
+    [
+      { "role": "subagent", "line": "師兄，築基丹真的那麼難煉嗎？" },
+      { "role": "builder", "line": "火候差一分，便是一爐廢渣。" }
+    ],
+    [
+      { "role": "_any", "line": "聽說海外群島那邊又不太平。" },
+      { "role": "_any", "line": "少打聽，專心修煉。" }
+    ]
+  ]
+}

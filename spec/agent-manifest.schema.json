@@ -1,0 +1,58 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://agent-diorama.dev/spec/agent-manifest/0.1.json",
+  "title": "Agent Manifest v0.1",
+  "description": "agent 入職描述，作為 agent.registered 事件的 data。",
+  "type": "object",
+  "required": ["id", "name", "role"],
+  "properties": {
+    "id": { "type": "string" },
+    "name": { "type": "string", "description": "顯示名稱" },
+    "role": {
+      "type": "string",
+      "description": "通用職能；未知值會落到 builder 席位",
+      "examples": ["orchestrator", "planner", "researcher", "builder", "reviewer", "monitor", "communicator", "designer", "subagent"]
+    },
+    "rank": { "type": "integer", "minimum": 1, "maximum": 9 },
+    "vendor": { "type": "string", "examples": ["anthropic", "openai", "google", "local"] },
+    "model": { "type": "string" },
+    "framework": { "type": "string", "examples": ["claude-agent-sdk", "langgraph", "crewai", "autogen", "custom"] },
+    "parent": { "type": "string", "description": "派生此 agent 的上層 agent id" },
+    "persona": {
+      "type": "object",
+      "description": "影響泡泡口吻與閒置台詞的個性設定",
+      "properties": {
+        "voice": { "type": "string", "examples": ["沉穩", "熱血", "毒舌", "溫和"] },
+        "chattiness": { "type": "number", "minimum": 0, "maximum": 1, "default": 0.5 },
+        "catchphrases": { "type": "array", "items": { "type": "string" } }
+      }
+    },
+    "appearance": {
+      "type": "object",
+      "description": "外觀插槽；hair/face 跨主題保留，outfit 可逐主題覆寫",
+      "properties": {
+        "head": { "type": "string" },
+        "face": { "type": "string" },
+        "hair": { "type": "string" },
+        "skinTone": { "type": "string" },
+        "hairColor": { "type": "string" },
+        "headRatio": { "type": "number", "minimum": 3, "maximum": 4 },
+        "heightScale": { "type": "number", "minimum": 0.9, "maximum": 1.1 },
+        "accessory": { "type": "array", "items": { "type": "string" } },
+        "themes": {
+          "type": "object",
+          "description": "依主題 id 覆寫，例如 { \"xianxia\": { \"outfit\": \"robe_azure\" } }",
+          "additionalProperties": { "type": "object" }
+        }
+      },
+      "additionalProperties": true
+    },
+    "seat": { "type": "string", "description": "指定席位錨點（選用）" },
+    "capabilities": {
+      "type": "array",
+      "description": "此 agent 的 adapter 支援的指令",
+      "items": { "enum": ["pause", "resume", "cancel", "approve", "reject", "assign_task", "send_message", "set_budget"] }
+    }
+  },
+  "additionalProperties": true
+}

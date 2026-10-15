@@ -1,0 +1,57 @@
+{
+  "v": "0.1",
+  "id": "_base",
+  "name": { "zh-TW": "基礎預設", "en": "Base" },
+  "engine": "^0.1",
+  "scene": {
+    "camera": { "pitchDeg": 60, "fovDeg": 30, "yawRangeDeg": 30, "tiltShift": true }
+  },
+  "states": {
+    "idle":          { "anim": "idle",       "expression": "neutral",  "prop": null,        "vfx": null,          "moveTo": "lounge" },
+    "thinking":      { "anim": "think",      "expression": "focus",    "prop": null,        "vfx": "dots",        "moveTo": null },
+    "tool_call":     { "anim": "type",       "expression": "focus",    "prop": "device",    "vfx": "screen_flash","moveTo": null },
+    "speaking":      { "anim": "talk",       "expression": "happy",    "prop": null,        "vfx": null,          "moveTo": null },
+    "listening":     { "anim": "listen",     "expression": "neutral",  "prop": null,        "vfx": null,          "moveTo": null },
+    "meeting":       { "anim": "talk",       "expression": "focus",    "prop": null,        "vfx": null,          "moveTo": "meeting" },
+    "waiting_human": { "anim": "raise_hand", "expression": "worried",  "prop": null,        "vfx": "beacon_yellow","moveTo": null },
+    "blocked":       { "anim": "slump",      "expression": "confused", "prop": null,        "vfx": null,          "moveTo": null },
+    "error":         { "anim": "panic",      "expression": "shock",    "prop": null,        "vfx": "smoke",       "moveTo": null },
+    "retrying":      { "anim": "reset",      "expression": "tired",    "prop": null,        "vfx": null,          "moveTo": null },
+    "long_running":  { "anim": "focus_loop", "expression": "focus",    "prop": null,        "vfx": "progress_ring","moveTo": "focus" },
+    "done":          { "anim": "cheer",      "expression": "proud",    "prop": null,        "vfx": "sparkle",     "moveTo": null },
+    "offline":       { "anim": "none",       "expression": "neutral",  "prop": null,        "vfx": null,          "moveTo": "exit" }
+  },
+  "metaphors": {
+    "cost": "成本",
+    "context": "Context",
+    "error": "錯誤",
+    "retry": "重試",
+    "done": "完成"
+  },
+  "bubbles": {
+    "files": { "zh-TW": "bubbles.zh-TW.json" },
+    "style": {
+      "maxVisible": 6,
+      "priority": ["alert", "dialogue", "work", "thought", "narrator", "banter", "idle"],
+      "durationMs": { "base": 1500, "perCharCJK": 250, "perWordLatin": 300, "max": 8000 },
+      "cooldownMs": { "work": 1500, "idleMin": 20000, "idleMax": 60000 },
+      "globalIdleIntervalMs": [8000, 15000],
+      "maxChars": { "work": 30, "idle": 20 },
+      "variants": {
+        "work":     { "fill": "solid",       "icon": true,  "italic": false, "opacity": 1.0 },
+        "dialogue": { "fill": "solid",       "icon": false, "italic": false, "opacity": 1.0, "tail": "to_target" },
+        "thought":  { "fill": "cloud",       "icon": false, "italic": false, "opacity": 0.85 },
+        "alert":    { "fill": "accent",      "icon": true,  "italic": false, "opacity": 1.0, "sticky": true },
+        "idle":     { "fill": "translucent", "icon": false, "italic": true,  "opacity": 0.6, "scale": 0.85 },
+        "banter":   { "fill": "translucent", "icon": false, "italic": true,  "opacity": 0.6, "scale": 0.85 },
+        "narrator": { "fill": "banner",      "icon": true,  "italic": false, "opacity": 1.0 }
+      },
+      "zoomLevels": {
+        "overview": ["alert"],
+        "area": ["alert", "dialogue", "work", "narrator"],
+        "close": ["alert", "dialogue", "work", "thought", "narrator", "banter", "idle"]
+      },
+      "redact": ["api_key", "bearer_token", "email", "phone", "credit_card"]
+    }
+  }
+}

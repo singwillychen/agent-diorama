@@ -1,0 +1,14 @@
+{"v":"0.1","id":"e01","ts":"2026-10-15T09:00:00Z","type":"agent.registered","agent":"agent_lead","data":{"id":"agent_lead","name":"Mira","role":"orchestrator","rank":8,"model":"claude-opus-5-5"}}
+{"v":"0.1","id":"e02","ts":"2026-10-15T09:00:01Z","type":"agent.registered","agent":"agent_builder_1","data":{"id":"agent_builder_1","name":"Kai","role":"builder","rank":6,"model":"claude-sonnet-5-5","parent":"agent_lead"}}
+{"v":"0.1","id":"e03","ts":"2026-10-15T09:00:02Z","type":"agent.registered","agent":"agent_research_1","data":{"id":"agent_research_1","name":"Lin","role":"researcher","rank":5,"vendor":"openai","framework":"openai-agents"}}
+{"v":"0.1","id":"e04","ts":"2026-10-15T09:00:05Z","type":"task.created","agent":"agent_lead","data":{"task":"t1","title":"修正登入逾時問題"}}
+{"v":"0.1","id":"e05","ts":"2026-10-15T09:00:06Z","type":"task.assigned","agent":"agent_lead","data":{"task":"t1","to":"agent_builder_1"},"utterance":"Kai，登入逾時交給你"}
+{"v":"0.1","id":"e06","ts":"2026-10-15T09:00:07Z","type":"message.sent","agent":"agent_lead","data":{"to":"agent_research_1","text":"查一下最近 session 設定有沒有被改過"}}
+{"v":"0.1","id":"e07","ts":"2026-10-15T09:00:08Z","type":"llm.started","agent":"agent_builder_1"}
+{"v":"0.1","id":"e08","ts":"2026-10-15T09:00:12Z","type":"tool.called","agent":"agent_builder_1","data":{"tool":"grep","args":{"pattern":"session_timeout"}}}
+{"v":"0.1","id":"e09","ts":"2026-10-15T09:00:13Z","type":"tool.finished","agent":"agent_builder_1","data":{"tool":"grep","durationMs":420}}
+{"v":"0.1","id":"e10","ts":"2026-10-15T09:00:20Z","type":"cost.updated","agent":"agent_builder_1","data":{"usd":0.042,"tokensIn":18000,"tokensOut":900}}
+{"v":"0.1","id":"e11","ts":"2026-10-15T09:00:25Z","type":"approval.requested","agent":"agent_builder_1","data":{"request":"a1","summary":"修改 config/session.yaml 的 timeout 值"}}
+{"v":"0.1","id":"e12","ts":"2026-10-15T09:01:10Z","type":"approval.resolved","agent":"human","data":{"request":"a1","decision":"approve"}}
+{"v":"0.1","id":"e13","ts":"2026-10-15T09:01:30Z","type":"task.completed","agent":"agent_builder_1","data":{"task":"t1"},"utterance":"搞定！逾時改回 30 分鐘了"}
+{"v":"0.1","id":"e14","ts":"2026-10-15T09:01:31Z","type":"say","agent":"agent_research_1","utterance":"順便發現另一個設定也怪怪的","visibility":"public"}

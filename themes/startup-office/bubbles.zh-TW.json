@@ -1,0 +1,56 @@
+{
+  "v": "0.1",
+  "locale": "zh-TW",
+  "templates": {
+    "llm.started":   { "kind": "thought", "default": ["嗯…", "讓我想一下", "這要怎麼拆…"] },
+    "tool.called": {
+      "kind": "work",
+      "default": ["開 {tool.name} 來用"],
+      "byTool": {
+        "grep":       ["翻一下「{args.pattern}」在哪"],
+        "read":       ["看一下 {args.path}"],
+        "edit":       ["改 {args.path} 中"],
+        "bash":       ["跑個指令"],
+        "web_search": ["Google 一下「{args.query}」"]
+      }
+    },
+    "tool.failed":        { "kind": "alert", "default": ["欸？{tool.name} 壞了"] },
+    "message.sent":       { "kind": "dialogue", "default": ["@{target.name} {data.text}"] },
+    "task.assigned":      { "kind": "dialogue", "default": ["@{target.name} 「{task.title}」麻煩你 🙏"] },
+    "task.completed":     { "kind": "work", "default": ["「{task.title}」Ship 了！🚀"] },
+    "task.failed":        { "kind": "alert", "default": ["「{task.title}」卡住了 😵"] },
+    "approval.requested": { "kind": "alert", "default": ["老闆，這個要你點頭：{data.summary}"] },
+    "agent.registered":   { "kind": "narrator", "default": ["新同事 {agent.name}（{agent.title}）報到！"] }
+  },
+  "idle": {
+    "_any": ["今天的咖啡好像比較淡…", "午餐吃什麼？", "這首歌好洗腦。", "椅子是不是又變矮了？", "要不要訂飲料？"],
+    "orchestrator": ["下一季 OKR 要怎麼訂…", "投資人又來信了。"],
+    "builder": ["先寫個 TODO 好了。", "這段 code 是誰寫的…喔是我。"],
+    "reviewer": ["測試全綠，感覺不太對勁。", "我再跑一次看看。"],
+    "designer": ["這個間距差 2px。", "要不要換個字體？"],
+    "monitor": ["監控圖表很平穩。", "希望今晚不會被 call。"],
+    "subagent": ["請問印表機在哪？", "我可以幫忙什麼嗎？"]
+  },
+  "contextual": [
+    { "when": { "recent": "error_resolved", "self": true, "within": "60s" }, "lines": ["好險，修好了 😮‍💨"] },
+    { "when": { "idleFor": "300s" }, "lines": ["今天好閒喔。"] },
+    { "when": { "budgetUsedAbove": 0.8 }, "lines": ["這個月預算快燒完了…"] },
+    { "when": { "timeOfDay": "night" }, "lines": ["又加班了 🌙", "叫個宵夜吧？"] },
+    { "when": { "recent": "task.completed", "self": false, "within": "30s" }, "lines": ["{other.name} 太神啦！"] },
+    { "when": { "streak": "task.completed", "count": 3, "self": true }, "lines": ["今天手感超好 🔥"] }
+  ],
+  "banter": [
+    [
+      { "role": "_any", "line": "午餐吃什麼？" },
+      { "role": "_any", "line": "等 CI 跑完再說。" }
+    ],
+    [
+      { "role": "builder", "line": "這個需求昨天不是這樣講的吧？" },
+      { "role": "planner", "line": "需求就是會長大的 😇" }
+    ],
+    [
+      { "role": "designer", "line": "這顆按鈕可以再大一點嗎？" },
+      { "role": "builder", "line": "……可以。" }
+    ]
+  ]
+}

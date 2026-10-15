@@ -1,0 +1,93 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://agent-diorama.dev/spec/theme/0.1.json",
+  "title": "Theme v0.1",
+  "description": "場景主題定義。可用 extends 繼承其他主題，只寫差異。",
+  "type": "object",
+  "required": ["v", "id"],
+  "properties": {
+    "v": { "type": "string" },
+    "id": { "type": "string" },
+    "extends": { "type": "string", "description": "父主題 id，預設 _base" },
+    "name": { "type": "object", "additionalProperties": { "type": "string" }, "description": "多語系名稱" },
+    "engine": { "type": "string", "description": "相容引擎版本範圍，例如 ^0.1" },
+    "scene": {
+      "type": "object",
+      "properties": {
+        "model": { "type": "string", "description": "場景 GLB 路徑" },
+        "camera": {
+          "type": "object",
+          "properties": {
+            "pitchDeg": { "type": "number", "default": 60 },
+            "fovDeg": { "type": "number", "default": 30 },
+            "yawRangeDeg": { "type": "number", "default": 30 },
+            "tiltShift": { "type": "boolean", "default": true }
+          }
+        },
+        "modules": { "type": "array", "items": { "type": "string" }, "description": "房間模組 GLB" }
+      }
+    },
+    "roles": {
+      "type": "object",
+      "description": "通用職能 → 主題身分",
+      "additionalProperties": {
+        "type": "object",
+        "properties": {
+          "title": { "type": "string" },
+          "outfit": { "type": "string" },
+          "badge": { "type": "string" },
+          "zone": { "type": "string" },
+          "props": { "type": "array", "items": { "type": "string" } }
+        }
+      }
+    },
+    "ranks": { "type": "object", "additionalProperties": { "type": "string" } },
+    "states": {
+      "type": "object",
+      "description": "狀態 → 視覺表現",
+      "additionalProperties": {
+        "type": "object",
+        "properties": {
+          "anim": { "type": "string" },
+          "expression": { "type": "string" },
+          "prop": { "type": ["string", "null"] },
+          "vfx": { "type": ["string", "null"] },
+          "moveTo": { "type": ["string", "null"], "description": "移動到哪個 zone；null 表示留在座位" },
+          "sfx": { "type": ["string", "null"] }
+        }
+      }
+    },
+    "zones": {
+      "type": "object",
+      "description": "zone id → 3D 錨點與溢出規則",
+      "additionalProperties": {
+        "type": "object",
+        "properties": {
+          "anchor": { "type": "string" },
+          "label": { "type": "string" },
+          "capacity": { "type": "integer" },
+          "overflow": { "enum": ["add_desk", "add_floor", "add_peak", "queue"] }
+        }
+      }
+    },
+    "messaging": {
+      "type": "object",
+      "properties": {
+        "visual": { "type": "string", "examples": ["headset_beam", "chat_bubble", "talisman"] },
+        "broadcastVisual": { "type": "string" }
+      }
+    },
+    "ambient": { "type": "object", "description": "狀態光與環境設定", "additionalProperties": true },
+    "audio": { "type": "object", "additionalProperties": true },
+    "metaphors": { "type": "object", "description": "系統概念 → 主題用語（cost→靈石…）", "additionalProperties": { "type": "string" } },
+    "tokens": { "type": "object", "description": "面板 design tokens", "additionalProperties": true },
+    "bubbles": {
+      "type": "object",
+      "properties": {
+        "files": { "type": "object", "additionalProperties": { "type": "string" }, "description": "locale → 台詞檔路徑" },
+        "style": { "type": "object", "additionalProperties": true }
+      }
+    }
+  },
+  "additionalProperties": true
+}

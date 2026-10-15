@@ -1,0 +1,56 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://agent-diorama.dev/spec/event-protocol/0.1.json",
+  "title": "Agent Diorama Event Protocol (ADEP) v0.1",
+  "description": "所有 agent 系統送入世界引擎的事件信封。未知的 type 與欄位必須被保留且不報錯。",
+  "type": "object",
+  "required": ["v", "id", "ts", "type"],
+  "properties": {
+    "v": { "type": "string", "description": "協定版本", "examples": ["0.1"] },
+    "id": { "type": "string", "description": "事件唯一 ID（建議 ULID）" },
+    "ts": { "type": "string", "format": "date-time" },
+    "type": {
+      "type": "string",
+      "description": "事件類型；已知類型見 enum 註記，另允許 custom.* 擴充",
+      "anyOf": [
+        {
+          "enum": [
+            "agent.registered", "agent.updated", "agent.unregistered", "agent.state_changed",
+            "llm.started", "llm.finished",
+            "tool.called", "tool.finished", "tool.failed",
+            "message.sent", "message.received", "meeting.started", "meeting.ended",
+            "task.created", "task.assigned", "task.updated", "task.completed", "task.failed",
+            "cost.updated", "context.updated",
+            "approval.requested", "approval.resolved", "input.requested",
+            "artifact.created", "memory.read", "memory.written",
+            "say"
+          ]
+        },
+        { "pattern": "^custom\\.[a-z0-9_.-]+$" }
+      ]
+    },
+    "agent": { "type": "string", "description": "發出事件的 agent id" },
+    "session": { "type": "string", "description": "一次執行／任務的 session id" },
+    "parent": { "type": "string", "description": "因果上的父事件 id（用於 trace 與回放）" },
+    "data": { "type": "object", "description": "依 type 而定的資料", "additionalProperties": true },
+    "utterance": {
+      "type": "string",
+      "maxLength": 120,
+      "description": "選用：agent 自述的一句話，優先顯示於文字泡泡"
+    },
+    "visibility": {
+      "enum": ["public", "redacted", "hidden"],
+      "default": "public",
+      "description": "redacted：泡泡只顯示動作類型；hidden：只記錄不顯示"
+    }
+  },
+  "additionalProperties": true,
+  "$defs": {
+    "state": {
+      "enum": [
+        "idle", "thinking", "tool_call", "speaking", "listening", "meeting",
+        "waiting_human", "blocked", "error", "retrying", "long_running", "done", "offline"
+      ]
+    }
+  }
+}

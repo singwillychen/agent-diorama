@@ -1,0 +1,59 @@
+{
+  "v": "0.1",
+  "id": "startup-office",
+  "extends": "_base",
+  "name": { "zh-TW": "新創辦公室", "en": "Startup Office" },
+  "scene": {
+    "model": "assets/scenes/startup-office/office.glb",
+    "modules": ["open_desks", "corner_office", "glass_meeting", "whiteboard_wall", "coffee_bar", "server_corner", "phone_booth", "entrance"]
+  },
+  "roles": {
+    "orchestrator": { "title": "CEO",        "outfit": "blazer_tee",      "badge": "lanyard_gold", "zone": "corner_office" },
+    "planner":      { "title": "Tech Lead",  "outfit": "flannel_shirt",   "badge": "lanyard",      "zone": "open_desks" },
+    "researcher":   { "title": "研究員",     "outfit": "cardigan",        "badge": "lanyard",      "zone": "open_desks" },
+    "builder":      { "title": "工程師",     "outfit": "hoodie",          "badge": "lanyard",      "zone": "open_desks", "props": ["laptop_stickers"] },
+    "reviewer":     { "title": "QA",         "outfit": "polo",            "badge": "lanyard",      "zone": "open_desks" },
+    "monitor":      { "title": "SRE",        "outfit": "tshirt_band",     "badge": "lanyard",      "zone": "server_corner" },
+    "communicator": { "title": "業務",       "outfit": "shirt_smart",     "badge": "lanyard",      "zone": "phone_booth", "props": ["headset"] },
+    "designer":     { "title": "設計師",     "outfit": "turtleneck",      "badge": "lanyard",      "zone": "open_desks", "props": ["tablet_pen"] },
+    "subagent":     { "title": "實習生",     "outfit": "tshirt_company",  "badge": "lanyard_guest","zone": "open_desks" },
+    "human":        { "title": "創辦人",     "outfit": "vest_patagonia",  "badge": "none",         "zone": "corner_office" }
+  },
+  "ranks": { "1": "Intern", "3": "Junior", "5": "Senior", "7": "Staff", "9": "C-level" },
+  "states": {
+    "idle":         { "anim": "scroll_phone", "moveTo": "lounge" },
+    "thinking":     { "anim": "chin_rest" },
+    "tool_call":    { "anim": "type_fast", "vfx": "keyboard_sparks" },
+    "meeting":      { "moveTo": "meeting" },
+    "error":        { "vfx": "monitor_bluescreen_smoke" },
+    "long_running": { "anim": "headphones_focus", "moveTo": "focus" },
+    "done":         { "anim": "high_five", "vfx": "confetti_small" }
+  },
+  "zones": {
+    "open_desks":    { "anchor": "zone:open_desks",    "label": "座位區",   "capacity": 16, "overflow": "add_desk" },
+    "corner_office": { "anchor": "zone:corner_office", "label": "辦公室",   "capacity": 2 },
+    "server_corner": { "anchor": "zone:server_corner", "label": "機櫃角",   "capacity": 2 },
+    "phone_booth":   { "anchor": "zone:phone_booth",   "label": "電話亭",   "capacity": 2 },
+    "meeting":       { "anchor": "zone:glass_meeting", "label": "會議室",   "capacity": 8, "overflow": "queue" },
+    "lounge":        { "anchor": "zone:coffee_bar",    "label": "咖啡吧" },
+    "focus":         { "anchor": "zone:phone_booth",   "label": "專注區" },
+    "exit":          { "anchor": "zone:entrance",      "label": "大門" }
+  },
+  "messaging": { "visual": "chat_bubble", "broadcastVisual": "slack_ping" },
+  "ambient": {
+    "dayNight": "realtime",
+    "props": {
+      "coffeeCups": { "bindTo": "cost.burnRate" },
+      "pizzaBoxes": { "bindTo": "task.overdueCount" },
+      "gong":       { "on": "task.completed", "filter": { "tag": "deploy" } }
+    }
+  },
+  "audio": { "ambience": "office_murmur", "message": "slack_knock", "alert": "pager", "done": "gong" },
+  "metaphors": { "cost": "燒錢速度", "context": "腦容量", "error": "Bug", "retry": "重開", "done": "Ship it" },
+  "tokens": {
+    "font": "'Inter', 'Noto Sans TC', sans-serif",
+    "bg": "#f7f7f5", "surface": "#ffffff", "text": "#1f2328", "muted": "#6b7280",
+    "accent": "#ff6a3d", "warn": "#f59e0b", "danger": "#ef4444",
+    "radius": "12px", "effects": ["soft_shadow"]
+  }
+}
