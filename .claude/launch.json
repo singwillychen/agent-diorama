@@ -1,7 +1,28 @@
 {
   "version": "0.0.1",
   "configurations": [
-    { "name": "web", "runtimeExecutable": "npm", "runtimeArgs": ["run", "web"], "port": 5173 },
-    { "name": "hub", "runtimeExecutable": "npm", "runtimeArgs": ["run", "hub"], "port": 4319 }
+    {
+      "name": "web",
+      "runtimeExecutable": "npm",
+      "runtimeArgs": [
+        "run",
+        "web"
+      ],
+      "port": 5173
+    },
+    {
+      "name": "hub",
+      "url": "http://127.0.0.1:4319",
+      "port": 4319
+    },
+    {
+      "name": "hub-standalone",
+      "runtimeExecutable": "npm",
+      "runtimeArgs": [
+        "run",
+        "hub"
+      ],
+      "port": 4319
+    }
   ]
 }

@@ -205,6 +205,21 @@ const server = http.createServer(async (req, res) => {
   }
 });
 
+server.on("error", async (err) => {
+  if (err.code !== "EADDRINUSE") throw err;
+  // Another process owns the port. If it's already a diorama hub, just reuse it.
+  try {
+    const r = await fetch(`http://${HOST}:${PORT}/v1/health`, { signal: AbortSignal.timeout(1500) });
+    const j = await r.json();
+    if (j?.ok) {
+      console.log(`[diorama-hub] a hub is already running on http://${HOST}:${PORT} (${j.events} events) — reusing it.`);
+      process.exit(0);
+    }
+  } catch { /* not a hub */ }
+  console.error(`[diorama-hub] port ${PORT} is in use by another program. Stop it, or start the hub on another port: DIORAMA_PORT=4320 npm run hub`);
+  process.exit(1);
+});
+
 server.listen(PORT, HOST, () => {
   console.log(`[diorama-hub] listening on http://${HOST}:${PORT}  (events loaded: ${events.length})${TOKEN ? "  [token required]" : ""}`);
 });
